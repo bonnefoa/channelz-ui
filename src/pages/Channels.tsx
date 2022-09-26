@@ -74,6 +74,9 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
         cell: ChannelStateCellFormatter,
         header: "Channel State",
       }),
+      columnHelper.accessor("lb_policy", {
+        header: "LB Policy",
+      }),
     ],
   });
 

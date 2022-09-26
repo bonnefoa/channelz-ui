@@ -30,4 +30,7 @@ export interface ChannelResponse {
     ref: ChannelRef;
     data: ChannelData;
     subchannel_ref: SubchannelId[];
+
+    // Added by channelz-proxy
+    lb_policy: string;
 }
