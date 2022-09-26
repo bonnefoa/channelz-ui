@@ -1,4 +1,5 @@
 import type { Timestamp } from "../types/CommonTypes";
+const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export function connectivityStateStr(state_id: number): string {
   switch (state_id) {
@@ -26,6 +27,7 @@ export function timestampToDate(timestamp: Timestamp): string {
   return date.toISOString();
 }
 
+
 export function getBackendData<Type>(
   endpoint: string,
   urlParameters: URLSearchParams,
@@ -39,7 +41,7 @@ export function getBackendData<Type>(
   }
 
   let emptyData: Type[] = [];
-  fetch(`http://localhost:8080/api/${endpoint}?${urlParameters}`)
+  fetch(`${REACT_APP_BACKEND_URL}/api/${endpoint}?${urlParameters}`)
     .then((httpRes) => httpRes.json())
     .then((res) => {
       if (res.error) {
