@@ -80,9 +80,6 @@ export const ServerList: React.FunctionComponent<ServerListProps> = ({
   const serverColumns: ColumnDef<ServerResponse, any> = columnHelper.group({
     header: "Server",
     columns: [
-      columnHelper.accessor("ref.server_name", {
-        header: "Server Name",
-      }),
       columnHelper.accessor("ref.server_id", {
         header: "Server Id",
       }),
