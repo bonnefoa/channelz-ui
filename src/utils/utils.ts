@@ -37,7 +37,7 @@ export function getBackendData<Type>(
   setError("");
   const host = urlParameters.get("host");
   if (host === "") {
-    return;
+      return;
   }
 
   let emptyData: Type[] = [];

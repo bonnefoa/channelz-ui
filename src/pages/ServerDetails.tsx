@@ -1,8 +1,6 @@
 import {
   createColumnHelper,
-  getCoreRowModel,
   ColumnDef,
-  useReactTable,
 } from "@tanstack/react-table";
 import { ConnectionError } from "../components/ConnectionError";
 import { TableChannelz } from "../components/TableChannelz";
@@ -73,16 +71,16 @@ export const ServerDetails: React.FunctionComponent<ServerDetailsProps> = ({
     );
   }, [host, serverId, lastClick]);
 
-  const table = useReactTable<SocketResponse>({
-    data: serverDetails,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  //const table = useReactTable<SocketResponse>({
+    //data: serverDetails,
+    //columns,
+    //getCoreRowModel: getCoreRowModel(),
+  //});
 
   return (
     <>
       <ConnectionError error={error} setError={setError} />
-      <TableChannelz table={table} />;
+      <TableChannelz data={serverDetails} columns={columns} />;
     </>
   );
 };

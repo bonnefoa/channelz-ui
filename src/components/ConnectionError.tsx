@@ -10,7 +10,6 @@ export const ConnectionError: React.FunctionComponent<ConnectionErrorProps> = ({
   error,
   setError,
 }) => {
-    console.log(error)
   if (error !== "") {
     return (
       <Alert dismissible onClose={() => setError("")} variant="danger">

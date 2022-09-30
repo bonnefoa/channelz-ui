@@ -1,8 +1,6 @@
 import {
   createColumnHelper,
-  getCoreRowModel,
   ColumnDef,
-  useReactTable,
 } from "@tanstack/react-table";
 
 import { TableChannelz } from "../components/TableChannelz";
@@ -92,12 +90,6 @@ export const ServerList: React.FunctionComponent<ServerListProps> = ({
     socketColumn,
   ];
 
-  const table = useReactTable<ServerResponse>({
-    data: servers,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
   React.useEffect(() => {
     const parameters = new URLSearchParams({
       host: host,
@@ -113,7 +105,7 @@ export const ServerList: React.FunctionComponent<ServerListProps> = ({
   return (
     <>
       <ConnectionError error={error} setError={setError}/>
-      <TableChannelz table={table} />
+      <TableChannelz data={servers} columns={columns} />
     </>
   );
 };

@@ -1,8 +1,7 @@
 import {
   createColumnHelper,
-  getCoreRowModel,
+  Row,
   ColumnDef,
-  useReactTable,
 } from "@tanstack/react-table";
 import { HostInput } from "../components/HostInput";
 import { ConnectionError } from "../components/ConnectionError";
@@ -13,6 +12,7 @@ import { getBackendData } from "../utils/utils";
 import { NumberCellFormatter } from "../components/CellNumber";
 import { DateCellFormatter } from "../components/FormattedTime";
 import { ChannelStateCellFormatter } from "../components/FormattedState";
+import * as _tanstack_table_core from "@tanstack/table-core";
 
 export const Channels: React.FunctionComponent = () => {
   const [host, setHost] = React.useState("");
@@ -56,7 +56,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
         header: "Calls Succeeded",
         cell: NumberCellFormatter,
       }),
-      columnHelper.accessor('data.calls_failed', {
+      columnHelper.accessor("data.calls_failed", {
         header: "Calls Failed",
         cell: NumberCellFormatter,
       }),
@@ -80,15 +80,52 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     ],
   });
 
+  //getValue().map(s => (
+  //<a
+  //key={s.subchannel_id}
+  //onClick={() => {
+  //setSubchannelId(s.subchannel_id);
+  //}}
+  //>
+  //{s.subchannel_id}
+  //</a>
+
   const channelColumns: ColumnDef<ChannelResponse, any> = columnHelper.group({
     header: "Channel",
     columns: [
       columnHelper.accessor("ref.name", {
         header: "Channel Name",
+        cell: ({ row, getValue }) => (
+          <>
+            <button
+              onClick={() => {
+                const parameters = new URLSearchParams({
+                  host: host,
+                  subchannelIds: row.original.subchannel_ref
+                    .map((a) => a.subchannel_id)
+                    .join(","),
+                });
+                getBackendData<ChannelResponse>(
+                  "subchannels",
+                  parameters,
+                  setError,
+                  (subchannels) => (row.original.subchannels = subchannels)
+                );
+                row.toggleExpanded();
+              }}
+            >
+              {row.getIsExpanded() ? "v" : ">"}
+            </button>{" "}
+            {getValue()}
+          </>
+        ),
       }),
       columnHelper.accessor("ref.channel_id", {
-        header: "Channel Id",
+        header: "Channel ID",
       }),
+      //columnHelper.accessor("ref.channel_id", {
+      //header: "Subchannel ID",
+      //}),
     ],
   });
 
@@ -98,11 +135,31 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     callColumns,
   ];
 
-  const table = useReactTable<ChannelResponse>({
-    data: channels,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  //const table = useReactTable<ChannelResponse>({
+    //data: channels,
+    //state: {
+      //expanded,
+    //},
+    //onExpandedChange: setExpanded,
+    //columns,
+    //getCoreRowModel: getCoreRowModel(),
+    //getExpandedRowModel: getExpandedRowModel(),
+  //});
+
+  //{
+  //const parameters = new URLSearchParams({
+  //host: host,
+  //subchannelIds: row.subchannel_ref.map(a => a.subchannel_id).join(","),
+  //});
+  //const res = getBackendData<ChannelResponse>(
+  //"subchannels",
+  //parameters,
+  //setError,
+  //(() => {return;})
+  //);
+  //console.log(res);
+  //return res;
+  //},
 
   React.useEffect(() => {
     const parameters = new URLSearchParams({
@@ -116,10 +173,21 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     );
   }, [host, lastClick]);
 
+  const renderSubchannels = ({ row }: { row: Row<ChannelResponse> }) => {
+    const channelResponse = row.original;
+    return (
+      <TableChannelz data={channelResponse.subchannels} columns={columns} />
+    );
+  };
+
   return (
     <>
       <ConnectionError error={error} setError={setError} />
-      <TableChannelz table={table} />
+      <TableChannelz
+        data={channels}
+        columns={columns}
+        renderSubComponent={renderSubchannels}
+      />
     </>
   );
 };
