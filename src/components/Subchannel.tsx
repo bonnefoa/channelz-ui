@@ -30,20 +30,20 @@ export const SubchannelList = ({
     header: "Calls",
     columns: [
       columnHelper.accessor("data.calls_started", {
-        header: "Calls Started",
+        header: "Started",
         cell: NumberCellFormatter,
       }),
       columnHelper.accessor("data.calls_succeeded", {
-        header: "Calls Succeeded",
+        header: "Succeeded",
         cell: NumberCellFormatter,
       }),
       columnHelper.accessor("data.calls_failed", {
-        header: "Calls Failed",
+        header: "Failed",
         cell: NumberCellFormatter,
       }),
       columnHelper.accessor("data.last_call_started_timestamp", {
         cell: DateCellFormatter,
-        header: "Last Call Started",
+        header: "Last Started",
       }),
     ],
   });
@@ -53,7 +53,7 @@ export const SubchannelList = ({
     columns: [
       columnHelper.accessor("data.state.state", {
         cell: ChannelStateCellFormatter,
-        header: "Channel State",
+        header: "State",
       }),
     ],
   });
@@ -63,7 +63,10 @@ export const SubchannelList = ({
       header: "Subchannel",
       columns: [
         columnHelper.accessor("ref.subchannel_id", {
-          header: "Subchannel ID",
+          header: "ID",
+        }),
+        columnHelper.accessor("data.target", {
+          header: "Target",
         }),
       ],
     });

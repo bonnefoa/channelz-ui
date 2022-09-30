@@ -30,10 +30,10 @@ export const TableChannelz = <TData extends RowData>({
   });
 
   return (
-    <Table striped bordered hover>
+    <Table bordered hover>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
+          <tr key={headerGroup.id} >
             {headerGroup.headers.map((header) => (
               <th key={header.id} colSpan={header.colSpan}>
                 {header.isPlaceholder
@@ -51,7 +51,10 @@ export const TableChannelz = <TData extends RowData>({
         {table.getRowModel().rows.map((row) => {
           return (
             <Fragment key={row.id}>
-              <tr>
+              <tr onClick={() => {
+                row.toggleExpanded();
+              }}
+              >
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <td key={cell.id}>

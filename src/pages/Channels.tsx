@@ -45,20 +45,20 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     header: "Calls",
     columns: [
       columnHelper.accessor("data.calls_started", {
-        header: "Calls Started",
+        header: "Started",
         cell: NumberCellFormatter,
       }),
       columnHelper.accessor("data.calls_succeeded", {
-        header: "Calls Succeeded",
+        header: "Succeeded",
         cell: NumberCellFormatter,
       }),
       columnHelper.accessor("data.calls_failed", {
-        header: "Calls Failed",
+        header: "Failed",
         cell: NumberCellFormatter,
       }),
       columnHelper.accessor("data.last_call_started_timestamp", {
         cell: DateCellFormatter,
-        header: "Last Call Started",
+        header: "Last Started",
       }),
     ],
   });
@@ -68,7 +68,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     columns: [
       columnHelper.accessor("data.state.state", {
         cell: ChannelStateCellFormatter,
-        header: "Channel State",
+        header: "State",
       }),
       columnHelper.accessor("lb_policy", {
         header: "LB Policy",
@@ -79,23 +79,17 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
   const channelColumns: ColumnDef<ChannelResponse, any> = columnHelper.group({
     header: "Channel",
     columns: [
-      columnHelper.accessor("ref.name", {
-        header: "Channel Name",
+      columnHelper.accessor("ref.channel_id", {
+        header: "ID",
         cell: ({ row, getValue }) => (
           <>
-            <button
-              onClick={() => {
-                row.toggleExpanded();
-              }}
-            >
-              {row.getIsExpanded() ? "v" : ">"}
-            </button>{" "}
+            {row.getIsExpanded() ? "v" : ">"}{" "}
             {getValue()}
           </>
         ),
       }),
-      columnHelper.accessor("ref.channel_id", {
-        header: "Channel ID",
+      columnHelper.accessor("data.target", {
+        header: "Target",
       }),
     ],
   });
