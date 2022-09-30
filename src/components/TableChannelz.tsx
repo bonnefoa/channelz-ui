@@ -12,10 +12,8 @@ import {
 } from "@tanstack/react-table";
 
 interface TableChannelzProps<TData extends RowData> {
-  //table: _tanstack_table_core.Table<TData>;
-
-  data: TData[]
-  columns: ColumnDef<TData>[]
+  data: TData[];
+  columns: ColumnDef<TData>[];
   renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
 }
 
@@ -24,13 +22,12 @@ export const TableChannelz = <TData extends RowData>({
   columns,
   renderSubComponent,
 }: TableChannelzProps<TData>) => {
-
-    const table = useReactTable<TData>({
-        data: data,
-        columns,
-        getCoreRowModel: getCoreRowModel(),
-        getExpandedRowModel: getExpandedRowModel(),
-    });
+  const table = useReactTable<TData>({
+    data: data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+  });
 
   return (
     <Table striped bordered hover>
@@ -69,7 +66,7 @@ export const TableChannelz = <TData extends RowData>({
               {row.getIsExpanded() && (
                 <tr>
                   <td colSpan={row.getVisibleCells().length}>
-                    {renderSubComponent ? renderSubComponent({ row }): <></>}
+                    {renderSubComponent ? renderSubComponent({ row }) : <></>}
                   </td>
                 </tr>
               )}

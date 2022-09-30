@@ -1,8 +1,4 @@
-import {
-  createColumnHelper,
-  Row,
-  ColumnDef,
-} from "@tanstack/react-table";
+import { createColumnHelper, Row, ColumnDef } from "@tanstack/react-table";
 import { HostInput } from "../components/HostInput";
 import { ConnectionError } from "../components/ConnectionError";
 import { TableChannelz } from "../components/TableChannelz";
@@ -11,8 +7,8 @@ import type { ChannelResponse } from "../types/ChannelTypes";
 import { getBackendData } from "../utils/utils";
 import { NumberCellFormatter } from "../components/CellNumber";
 import { DateCellFormatter } from "../components/FormattedTime";
+import { SubchannelList } from "../components/Subchannel";
 import { ChannelStateCellFormatter } from "../components/FormattedState";
-import * as _tanstack_table_core from "@tanstack/table-core";
 
 export const Channels: React.FunctionComponent = () => {
   const [host, setHost] = React.useState("");
@@ -43,7 +39,6 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
 }) => {
   const columnHelper = createColumnHelper<ChannelResponse>();
   const [channels, setChannels] = React.useState<ChannelResponse[]>([]);
-  const [subchannelMap, setSubchannelMap] = React.useState<{[id: number]: ChannelResponse[]}>({});
   const [error, setError] = React.useState("");
 
   const callColumns: ColumnDef<ChannelResponse, any> = columnHelper.group({
@@ -90,23 +85,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
           <>
             <button
               onClick={() => {
-                const parameters = new URLSearchParams({
-                  host: host,
-                  subchannelIds: row.original.subchannel_ref
-                    .map((a) => a.subchannel_id)
-                    .join(","),
-                });
-                getBackendData<ChannelResponse>(
-                  "subchannels",
-                  parameters,
-                  setError,
-                  (subchannels) => {
-                      const channelId = row.original.ref.channel_id;
-                      subchannelMap[channelId] = subchannels;
-                      setSubchannelMap(subchannelMap);
-                      row.toggleExpanded();
-                  }
-                );
+                row.toggleExpanded();
               }}
             >
               {row.getIsExpanded() ? "v" : ">"}
@@ -140,8 +119,14 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
   }, [host, lastClick]);
 
   const renderSubchannels = ({ row }: { row: Row<ChannelResponse> }) => {
-    const subchannels = subchannelMap[row.original.ref.channel_id];
-    return ( <TableChannelz data={subchannels} columns={columns} />);
+    return (
+      <SubchannelList
+        host={host}
+        lastClick={lastClick}
+        setError={setError}
+        subchannelIds={row.original.subchannel_ref}
+      />
+    );
   };
 
   return (
