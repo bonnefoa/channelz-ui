@@ -33,7 +33,4 @@ export interface ChannelResponse {
 
     // Added by channelz-proxy
     lb_policy: string;
-
-    // Manually filled
-    subchannels: ChannelResponse[];
 }

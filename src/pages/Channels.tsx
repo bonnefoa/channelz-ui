@@ -43,6 +43,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
 }) => {
   const columnHelper = createColumnHelper<ChannelResponse>();
   const [channels, setChannels] = React.useState<ChannelResponse[]>([]);
+  const [subchannelMap, setSubchannelMap] = React.useState<{[id: number]: ChannelResponse[]}>({});
   const [error, setError] = React.useState("");
 
   const callColumns: ColumnDef<ChannelResponse, any> = columnHelper.group({
@@ -80,16 +81,6 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     ],
   });
 
-  //getValue().map(s => (
-  //<a
-  //key={s.subchannel_id}
-  //onClick={() => {
-  //setSubchannelId(s.subchannel_id);
-  //}}
-  //>
-  //{s.subchannel_id}
-  //</a>
-
   const channelColumns: ColumnDef<ChannelResponse, any> = columnHelper.group({
     header: "Channel",
     columns: [
@@ -109,9 +100,13 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
                   "subchannels",
                   parameters,
                   setError,
-                  (subchannels) => (row.original.subchannels = subchannels)
+                  (subchannels) => {
+                      const channelId = row.original.ref.channel_id;
+                      subchannelMap[channelId] = subchannels;
+                      setSubchannelMap(subchannelMap);
+                      row.toggleExpanded();
+                  }
                 );
-                row.toggleExpanded();
               }}
             >
               {row.getIsExpanded() ? "v" : ">"}
@@ -123,9 +118,6 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
       columnHelper.accessor("ref.channel_id", {
         header: "Channel ID",
       }),
-      //columnHelper.accessor("ref.channel_id", {
-      //header: "Subchannel ID",
-      //}),
     ],
   });
 
@@ -134,32 +126,6 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     stateColumn,
     callColumns,
   ];
-
-  //const table = useReactTable<ChannelResponse>({
-    //data: channels,
-    //state: {
-      //expanded,
-    //},
-    //onExpandedChange: setExpanded,
-    //columns,
-    //getCoreRowModel: getCoreRowModel(),
-    //getExpandedRowModel: getExpandedRowModel(),
-  //});
-
-  //{
-  //const parameters = new URLSearchParams({
-  //host: host,
-  //subchannelIds: row.subchannel_ref.map(a => a.subchannel_id).join(","),
-  //});
-  //const res = getBackendData<ChannelResponse>(
-  //"subchannels",
-  //parameters,
-  //setError,
-  //(() => {return;})
-  //);
-  //console.log(res);
-  //return res;
-  //},
 
   React.useEffect(() => {
     const parameters = new URLSearchParams({
@@ -174,10 +140,8 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
   }, [host, lastClick]);
 
   const renderSubchannels = ({ row }: { row: Row<ChannelResponse> }) => {
-    const channelResponse = row.original;
-    return (
-      <TableChannelz data={channelResponse.subchannels} columns={columns} />
-    );
+    const subchannels = subchannelMap[row.original.ref.channel_id];
+    return ( <TableChannelz data={subchannels} columns={columns} />);
   };
 
   return (
