@@ -1,3 +1,5 @@
+builds: []
+
 archives:
 - id: channelz-ui
   files:
