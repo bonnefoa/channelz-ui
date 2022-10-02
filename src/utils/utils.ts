@@ -41,7 +41,7 @@ export function getBackendData<Type>(
   }
 
   let emptyData: Type[] = [];
-  fetch(`${REACT_APP_BACKEND_URL}/api/${endpoint}?${urlParameters}`)
+  fetch(`${REACT_APP_BACKEND_URL}api/${endpoint}?${urlParameters}`)
     .then((httpRes) => httpRes.json())
     .then((res) => {
       if (res.error) {
