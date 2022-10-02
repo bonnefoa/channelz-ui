@@ -1,7 +1,11 @@
 {
-  "name": "ts-react-router-v5",
+  "name": "channelz-ui",
   "version": "0.1.0",
-  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bonnefoa/channelz-ui.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "@tanstack/react-table": "^8.5.13",
     "@testing-library/jest-dom": "^5.16.4",

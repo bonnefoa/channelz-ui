@@ -32,8 +32,6 @@ spec:
       - name: channelz-ui
         image: {{ $.Values.image.channelz_ui.name }}:{{ $.Values.image.channelz_ui.tag }}
         imagePullPolicy: {{ $.Values.docker.pullPolicy }}
-        command: [ "/bin/sh", "-c", "--" ]
-        args: [ "while true; do sleep 30; done;" ]
         resources:
           requests:
             memory: {{ $.Values.resources.channelz_ui.memory }}
