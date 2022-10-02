@@ -1,0 +1,14 @@
+port: 80
+
+docker:
+  pullPolicy: IfNotPresent
+
+image:
+  channelz_ui:
+    name: bonnefoa/channelz-ui
+    tag: v0.0.1
+
+resources:
+  channelz_ui:
+    memory: 0.5G
+    cpu: 1
