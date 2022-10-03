@@ -73,11 +73,7 @@ export const TableChannelz = <TData extends RowData>({
         {table.getRowModel().rows.map((row) => {
           return (
             <Fragment key={row.id}>
-              <tr
-                onClick={() => {
-                  row.toggleExpanded();
-                }}
-              >
+              <tr>
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <td key={cell.id}>
@@ -89,7 +85,7 @@ export const TableChannelz = <TData extends RowData>({
                   );
                 })}
               </tr>
-              {row.getIsExpanded() && (
+              {row.getIsExpanded() && renderSubComponent && (
                 <tr className="expanded-row">
                   <td colSpan={row.getVisibleCells().length}>
                     {renderSubComponent ? renderSubComponent({ row }) : <></>}

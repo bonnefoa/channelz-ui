@@ -44,6 +44,10 @@ tr.expanded-row > td {
     padding-top: 0em;
 }
 
+div.offcanvas-end {
+    width: 1200px;
+}
+
 .nav-link {
     cursor: pointer;
 }

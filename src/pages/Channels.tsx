@@ -8,7 +8,10 @@ import { getBackendData } from "../utils/utils";
 import { NumberCellFormatter } from "../components/CellNumber";
 import { DateCellFormatter } from "../components/FormattedTime";
 import { SubchannelList } from "../components/Subchannel";
+import { EventList } from "../components/Events";
 import { ChannelStateCellFormatter } from "../components/FormattedState";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import type { Event } from "../types/CommonTypes";
 
 export const Channels: React.FunctionComponent = () => {
   const [host, setHost] = React.useState("");
@@ -40,6 +43,12 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
   const columnHelper = createColumnHelper<ChannelResponse>();
   const [channels, setChannels] = React.useState<ChannelResponse[]>([]);
   const [error, setError] = React.useState("");
+  const [showEvents, setShowEvents] = React.useState(false);
+
+  const [events, setEvents] = React.useState<Event[]>([]);
+  const [eventChannelId, setEventChannelId] = React.useState<number>(0);
+
+  const handleClose = () => setShowEvents(false);
 
   const callColumns: ColumnDef<ChannelResponse, any> = columnHelper.group({
     header: "Calls",
@@ -73,6 +82,20 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
       columnHelper.accessor("lb_policy", {
         header: "LB Policy",
       }),
+      columnHelper.accessor("data.trace.num_events_logged", {
+        header: "Num events",
+        cell: ({ row, getValue }) => (
+          <div
+            onClick={() => {
+              setEvents(row.original.data.trace.events);
+              setEventChannelId(row.original.ref.channel_id);
+              setShowEvents(true);
+            }}
+          >
+            {getValue()}
+          </div>
+        ),
+      }),
     ],
   });
 
@@ -84,9 +107,13 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
         enableSorting: true,
         sortingFn: "basic",
         cell: ({ row, getValue }) => (
-          <>
+          <div
+            onClick={() => {
+              row.toggleExpanded();
+            }}
+          >
             {row.getIsExpanded() ? "▼" : "▶"} {getValue()}
-          </>
+          </div>
         ),
       }),
       columnHelper.accessor("data.target", {
@@ -130,9 +157,23 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
       <TableChannelz
         data={channels}
         columns={columns}
-        initialSortingState={[{id: "ref_channel_id", desc: false}]}
+        initialSortingState={[{ id: "ref_channel_id", desc: false }]}
         renderSubComponent={renderSubchannels}
       />
+
+      <Offcanvas
+        show={showEvents}
+        onHide={handleClose}
+        placement={"end"}
+        scroll={true}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Events for channel {eventChannelId}</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <EventList events={events} />
+        </Offcanvas.Body>
+      </Offcanvas>
     </>
   );
 };
