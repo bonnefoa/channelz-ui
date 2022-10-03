@@ -89,5 +89,5 @@ export const SubchannelList = ({
       setSubchannels
     );
   }, [host, lastClick]);
-  return <TableChannelz data={subchannels} columns={columns} />;
+  return <TableChannelz data={subchannels} columns={columns} variant={"dark"}/>;
 };

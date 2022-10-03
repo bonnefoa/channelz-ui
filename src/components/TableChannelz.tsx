@@ -15,12 +15,14 @@ interface TableChannelzProps<TData extends RowData> {
   data: TData[];
   columns: ColumnDef<TData>[];
   renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
+    variant?: string;
 }
 
 export const TableChannelz = <TData extends RowData>({
   data,
   columns,
   renderSubComponent,
+    variant,
 }: TableChannelzProps<TData>) => {
   const table = useReactTable<TData>({
     data: data,
@@ -30,7 +32,7 @@ export const TableChannelz = <TData extends RowData>({
   });
 
   return (
-    <Table bordered hover>
+    <Table bordered hover variant={variant}>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id} >
