@@ -81,10 +81,11 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     columns: [
       columnHelper.accessor("ref.channel_id", {
         header: "ID",
+        enableSorting: true,
+        sortingFn: "basic",
         cell: ({ row, getValue }) => (
           <>
-            {row.getIsExpanded() ? "▼" : "▶"}{" "}
-            {getValue()}
+            {row.getIsExpanded() ? "▼" : "▶"} {getValue()}
           </>
         ),
       }),
@@ -129,6 +130,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
       <TableChannelz
         data={channels}
         columns={columns}
+        initialSortingState={[{id: "ref_channel_id", desc: false}]}
         renderSubComponent={renderSubchannels}
       />
     </>

@@ -8,6 +8,8 @@ import {
   getExpandedRowModel,
   ColumnDef,
   flexRender,
+  getSortedRowModel,
+  SortingState,
   Row,
 } from "@tanstack/react-table";
 
@@ -15,19 +17,28 @@ interface TableChannelzProps<TData extends RowData> {
   data: TData[];
   columns: ColumnDef<TData>[];
   renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement;
-    variant?: string;
+  variant?: string;
+  initialSortingState?: SortingState;
 }
 
 export const TableChannelz = <TData extends RowData>({
   data,
   columns,
   renderSubComponent,
-    variant,
+  variant,
+  initialSortingState,
 }: TableChannelzProps<TData>) => {
+  const [sorting, setSorting] = React.useState<SortingState>(initialSortingState || []);
+
   const table = useReactTable<TData>({
     data: data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
   });
 
@@ -35,15 +46,24 @@ export const TableChannelz = <TData extends RowData>({
     <Table bordered hover variant={variant}>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} >
+          <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th key={header.id} colSpan={header.colSpan}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
+              <th
+                key={header.id}
+                colSpan={header.colSpan}
+                onClick={header.column.getToggleSortingHandler()}
+              >
+                {header.isPlaceholder ? null : (
+                  <>
+                    {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
+                    {{ asc: " 🔼", desc: " 🔽" }[
+                      header.column.getIsSorted() as string
+                    ] ?? null}
+                  </>
+                )}
               </th>
             ))}
           </tr>
@@ -53,9 +73,10 @@ export const TableChannelz = <TData extends RowData>({
         {table.getRowModel().rows.map((row) => {
           return (
             <Fragment key={row.id}>
-              <tr onClick={() => {
-                row.toggleExpanded();
-              }}
+              <tr
+                onClick={() => {
+                  row.toggleExpanded();
+                }}
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
@@ -69,7 +90,7 @@ export const TableChannelz = <TData extends RowData>({
                 })}
               </tr>
               {row.getIsExpanded() && (
-                <tr>
+                <tr className="expanded-row">
                   <td colSpan={row.getVisibleCells().length}>
                     {renderSubComponent ? renderSubComponent({ row }) : <></>}
                   </td>
