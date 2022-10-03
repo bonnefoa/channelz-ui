@@ -83,7 +83,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
         header: "ID",
         cell: ({ row, getValue }) => (
           <>
-            {row.getIsExpanded() ? "v" : ">"}{" "}
+            {row.getIsExpanded() ? "▼" : "▶"}{" "}
             {getValue()}
           </>
         ),
