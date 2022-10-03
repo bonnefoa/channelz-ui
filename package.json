@@ -5,6 +5,7 @@
     "type": "git",
     "url": "https://github.com/bonnefoa/channelz-ui.git"
   },
+  "private": "true",
   "license": "MIT",
   "dependencies": {
     "@tanstack/react-table": "^8.5.13",
