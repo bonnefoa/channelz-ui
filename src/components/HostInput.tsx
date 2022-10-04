@@ -3,41 +3,43 @@ import Form from "react-bootstrap/Form";
 import * as React from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-const REACT_APP_BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import InputGroup from "react-bootstrap/InputGroup";
 
 interface HostInputProps {
+  currentHost: string;
   setHost: (host: string) => void;
 }
 
 export const HostInput: React.FunctionComponent<HostInputProps> = ({
+  currentHost,
   setHost,
 }) => {
   const [tempHost, setTempHost] = React.useState("localhost:3333");
   return (
-    <Form>
-      <Row>
-        <Col>Channelz Proxy: { REACT_APP_BACKEND_URL } </Col>
+    <>
+      <Row className="mb-3 mt-3">
+        <Form as={Col} lg="5">
+          <InputGroup>
+            <InputGroup.Text>Channelz Endpoint:</InputGroup.Text>
+            <Form.Control
+              aria-label="host"
+              value={tempHost}
+              onChange={(e) => setTempHost(e.target.value)}
+            />
+            <Button
+              variant="primary"
+              onClick={() => {
+                setHost(tempHost);
+              }}
+            >
+              Submit
+            </Button>
+          </InputGroup>
+        </Form>
       </Row>
-      <Form.Group as={Row} controlId="formHostInput">
-        <Form.Label column sm="2">
-          Channelz Endpoint:
-        </Form.Label>
-        <Col sm="2">
-          <Form.Control
-            value={tempHost}
-            onChange={(e) => setTempHost(e.target.value)}
-          />
-        </Col>
-      </Form.Group>
-
-      <Button
-        variant="primary"
-        onClick={() => {
-          setHost(tempHost);
-        }}
-      >
-        Submit
-      </Button>
-    </Form>
+      <Row className="mb-3 mt-3">
+        <Col>Current endpoint: {currentHost}</Col>
+      </Row>
+    </>
   );
 };

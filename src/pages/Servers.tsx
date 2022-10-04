@@ -19,12 +19,12 @@ export const Servers: React.FunctionComponent = () => {
   return (
     <div>
       <HostInput
+      currentHost={host}
         setHost={(value) => {
           setHost(value);
           setLastClick(Date.now());
         }}
       />
-      Current host: {host}
       <ServerList host={host} lastClick={lastClick} />
     </div>
   );
