@@ -85,15 +85,16 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
       columnHelper.accessor("data.trace.num_events_logged", {
         header: "Num events",
         cell: ({ row, getValue }) => (
-          <div
+          <a
             onClick={() => {
               setEvents(row.original.data.trace.events);
               setEventChannelId(row.original.ref.channel_id);
               setShowEvents(true);
             }}
+            href="#"
           >
             {getValue()}
-          </div>
+          </a>
         ),
       }),
     ],
