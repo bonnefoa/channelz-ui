@@ -41,7 +41,7 @@ export const ServerList: React.FunctionComponent<ServerListProps> = ({
 }) => {
   const columnHelper = createColumnHelper<ServerResponse>();
   const [servers, setServers] = React.useState<ServerResponse[]>([]);
-  const [error, setError] = React.useState("");
+  const [errors, setErrors] = React.useState<string[]>([]);
 
   const socketColumn: ColumnDef<ServerResponse, any> = columnHelper.group({
     header: "Sockets",
@@ -97,14 +97,14 @@ export const ServerList: React.FunctionComponent<ServerListProps> = ({
     getBackendData<ServerResponse>(
       "servers",
       parameters,
-      setError,
+      setErrors,
       setServers
     );
   }, [host, lastClick]);
 
   return (
     <>
-      <ConnectionError error={error} setError={setError}/>
+      <ConnectionError errors={errors} setErrors={setErrors}/>
       <TableChannelz data={servers} columns={columns} />
     </>
   );

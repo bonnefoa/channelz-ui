@@ -27,32 +27,40 @@ export function timestampToDate(timestamp: Timestamp): string {
   return date.toISOString();
 }
 
-
 export function getBackendData<Type>(
   endpoint: string,
   urlParameters: URLSearchParams,
-  setError: (e: string) => void,
+  setErrors: (e: string[]) => void,
   setData: (e: Type[]) => void
 ): void {
-  setError("");
+  setErrors([]);
   const host = urlParameters.get("host");
   if (host === "") {
-      return;
+    return;
   }
 
-  let emptyData: Type[] = [];
-  fetch(`${REACT_APP_BACKEND_URL}api/${endpoint}?${urlParameters}`)
-    .then((httpRes) => httpRes.json())
+  let url = `${REACT_APP_BACKEND_URL}api/${endpoint}?${urlParameters}`;
+  fetch(url)
+    .then((httpRes) => {
+      return httpRes.json();
+    })
     .then((res) => {
       if (res.error) {
-        setData(emptyData);
-        setError(res.error);
+        setData([]);
+        setErrors([
+            "Error from Channelz-proxy.",
+            res.error
+        ]);
       } else {
         setData(res.data);
       }
     })
     .catch((e) => {
-      setData(emptyData);
-      setError(`Couldn't connect to ${host}: ${e.statusText}`);
+      setData([]);
+      setErrors([
+        "Error when trying to fetch data from channelz-proxy.",
+        `Url: ${url}.`,
+        `Error: "${e}"`,
+      ]);
     });
 }

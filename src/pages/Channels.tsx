@@ -20,7 +20,7 @@ export const Channels: React.FunctionComponent = () => {
   return (
     <div>
       <HostInput
-      currentHost={host}
+        currentHost={host}
         setHost={(value) => {
           setHost(value);
           setLastClick(Date.now());
@@ -42,7 +42,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
 }) => {
   const columnHelper = createColumnHelper<ChannelResponse>();
   const [channels, setChannels] = React.useState<ChannelResponse[]>([]);
-  const [error, setError] = React.useState("");
+  const [errors, setErrors] = React.useState<string[]>([]);
   const [showEvents, setShowEvents] = React.useState(false);
 
   const [events, setEvents] = React.useState<Event[]>([]);
@@ -136,7 +136,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
     getBackendData<ChannelResponse>(
       "channels",
       parameters,
-      setError,
+      setErrors,
       setChannels
     );
   }, [host, lastClick]);
@@ -146,7 +146,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
       <SubchannelList
         host={host}
         lastClick={lastClick}
-        setError={setError}
+        setErrors={setErrors}
         subchannelIds={row.original.subchannel_ref}
       />
     );
@@ -154,7 +154,7 @@ export const ChannelList: React.FunctionComponent<ChannelListProps> = ({
 
   return (
     <>
-      <ConnectionError error={error} setError={setError} />
+      <ConnectionError errors={errors} setErrors={setErrors} />
       <TableChannelz
         data={channels}
         columns={columns}

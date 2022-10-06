@@ -11,14 +11,14 @@ import { getBackendData } from "../utils/utils";
 type SubchannelProps = {
   host: string;
   lastClick: number;
-  setError: (e: string) => void;
+  setErrors: (e: string[]) => void;
   subchannelIds: SubchannelId[];
 };
 
 export const SubchannelList = ({
   host,
   lastClick,
-  setError,
+  setErrors,
   subchannelIds,
 }: SubchannelProps) => {
   const columnHelper = createColumnHelper<SubchannelResponse>();
@@ -85,7 +85,7 @@ export const SubchannelList = ({
     getBackendData<SubchannelResponse>(
       "subchannels",
       parameters,
-      setError,
+      setErrors,
       setSubchannels
     );
   }, [host, lastClick]);

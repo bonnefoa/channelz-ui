@@ -10,7 +10,7 @@ import "./App.css";
 
 function App() {
   return (
-    <Container>
+    <Container fluid>
       <Tab.Container defaultActiveKey="channels">
         <Row>
           <Nav variant="tabs">

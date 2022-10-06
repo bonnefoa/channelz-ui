@@ -23,7 +23,7 @@ export const ServerDetails: React.FunctionComponent<ServerDetailsProps> = ({
   const [serverDetails, setServerDetails] = React.useState<SocketResponse[]>(
     []
   );
-  const [error, setError] = React.useState("");
+  const [errors, setErrors] = React.useState<string[]>([]);
   const columnHelper = createColumnHelper<SocketResponse>();
   const streamColumns: ColumnDef<SocketResponse, any> = columnHelper.group({
     header: "Streams",
@@ -66,20 +66,14 @@ export const ServerDetails: React.FunctionComponent<ServerDetailsProps> = ({
     getBackendData<SocketResponse>(
       "serverSockets",
       parameters,
-      setError,
+      setErrors,
       setServerDetails
     );
   }, [host, serverId, lastClick]);
 
-  //const table = useReactTable<SocketResponse>({
-    //data: serverDetails,
-    //columns,
-    //getCoreRowModel: getCoreRowModel(),
-  //});
-
   return (
     <>
-      <ConnectionError error={error} setError={setError} />
+      <ConnectionError errors={errors} setErrors={setErrors} />
       <TableChannelz data={serverDetails} columns={columns} />;
     </>
   );
