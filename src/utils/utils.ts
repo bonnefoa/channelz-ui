@@ -45,11 +45,13 @@ export function getBackendData<Type>(
       return httpRes.json();
     })
     .then((res) => {
-      if (res.error) {
+      if (res.message) {
         setData([]);
         setErrors([
             "Error from Channelz-proxy.",
-            res.error
+            `gRPC error code: ${res.code}`,
+            `Details: ${res.details}`,
+            `Message: ${res.message}`,
         ]);
       } else {
         setData(res.data);
