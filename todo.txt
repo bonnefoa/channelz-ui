@@ -1,5 +1,7 @@
+x 2022-10-12 Color transient failure
+(A) Socket details
+(A) Linter
 (A) Column size with high number
-(A) Color transient failure
 (A) Fix sorting
 x 2022-10-06 Column ordering
 x 2022-10-06 Events

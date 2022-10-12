@@ -2,6 +2,7 @@ import Table from "react-bootstrap/Table";
 import React, { Fragment } from "react";
 import { RowData } from "@tanstack/table-core";
 import * as _tanstack_table_core from "@tanstack/table-core";
+import type { Cell } from "@tanstack/table-core";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,6 +13,7 @@ import {
   SortingState,
   Row,
 } from "@tanstack/react-table";
+import { channelStateToClass } from "../utils/utils";
 
 interface TableChannelzProps<TData extends RowData> {
   data: TData[];
@@ -29,6 +31,13 @@ export const TableChannelz = <TData extends RowData>({
   initialSortingState,
 }: TableChannelzProps<TData>) => {
   const [sorting, setSorting] = React.useState<SortingState>(initialSortingState || []);
+
+  const cellToClass = function(cell: Cell<TData, any>): string | undefined {
+      if (cell.column.columnDef.header == "State") {
+          return `${channelStateToClass(cell.getValue())} text-white`;
+      }
+  }
+
 
   const table = useReactTable<TData>({
     data: data,
@@ -76,7 +85,7 @@ export const TableChannelz = <TData extends RowData>({
               <tr>
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <td key={cell.id}>
+                    <td key={cell.id} className={cellToClass(cell)}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

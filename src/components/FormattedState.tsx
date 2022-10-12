@@ -5,5 +5,3 @@ export const ChannelStateCellFormatter = (cell: ChannelStateCell): string => {
     const channelState = cell.getValue()
     return connectivityStateStr(channelState);
 };
-
-

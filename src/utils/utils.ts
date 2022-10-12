@@ -19,6 +19,24 @@ export function connectivityStateStr(state_id: number): string {
   return "Unknown state";
 }
 
+export function channelStateToClass(state_id: number): string {
+  switch (state_id) {
+    case 0:
+      return "bg-warning";
+    case 1:
+      return "bg-light";
+    case 2:
+      return "bg-light";
+    case 3:
+      return "bg-success";
+    case 4:
+      return "bg-danger";
+    case 5:
+      return "bg-light";
+  }
+  return "bg-light";
+}
+
 export function timestampToDate(timestamp: Timestamp): string {
   if (timestamp.seconds <= 0) {
     return "-";
